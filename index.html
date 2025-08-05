@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun!</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        /* === BAGIAN CSS (Tidak ada perubahan) === */
+        
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #FFC0CB;
+            --secondary-color: #FF69B4;
+            --text-color: #5d3a3a;
+            --bg-color: #FFF0F5;
+            --container-bg: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 20px;
+            background-color: var(--container-bg);
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: var(--secondary-color);
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
+            margin: 30px 0;
+        }
+        
+        #countdown-container h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        
+        #countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        #countdown div {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 80px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        #countdown div span {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-color);
+            margin-top: 5px;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin-top: 20px;
+        }
+
+        .image-item {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            border: 4px solid white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-item:hover {
+            transform: scale(1.15) !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 100 !important;
+        }
+        
+        p.message {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="birthday-song" src="happy-birthday.mp3" preload="auto"></audio>
+    
+    <div class="container">
+        
+        <h1>Selamat Ulang Tahun, My Baby Boo!</h1>
+        <hr>
+        <div id="countdown-container">
+            <h2>Hitung Mundur ke Hari Spesial Kamu</h2>
+            <div id="countdown"></div>
+        </div>
+        <hr>
+        
+        <div class="image-container" id="image-gallery"></div>
+        
+        <hr>
+        
+        <p class="message">
+            "Untuk orang yang paling spesial, cintaku, sayangku, my baby boo, selamat bertambah usia! Terima kasih untuk semua tawa, dukungan, dan kebahagiaan yang kamu bawa setiap hari. Semoga semua mimpimu tercapai. I love you!"
+        </p>
+        </div>
+
+    <script>
+       // --- Countdown Timer ---
+       const countDownDate = new Date(2025, 7, 6, 0, 0, 0).getTime();
+
+       const x = setInterval(function() {
+           const now = new Date().getTime();
+           const distance = countDownDate - now;
+
+           const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+           const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+           const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+           const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+           const countdownEl = document.getElementById("countdown");
+
+           if (distance > 0) {
+                countdownEl.innerHTML = `<div>${days}<span>Hari</span></div><div>${hours}<span>Jam</span></div><div>${minutes}<span>Menit</span></div><div>${seconds}<span>Detik</span></div>`;
+           } else {
+               clearInterval(x);
+               const countdownContainer = document.getElementById("countdown-container");
+               countdownContainer.innerHTML = '<h2>Waktunya Tiba...</h2><h1 style="font-size: 3rem; margin-top:10px;">HAPPY BIRTHDAY! &#x1F389;&#x1F382;</h1>';
+
+               const song = document.getElementById('birthday-song');
+               song.play();
+
+               const duration = 5 * 1000;
+               const animationEnd = Date.now() + duration;
+               const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 101 };
+
+               function randomInRange(min, max) {
+                   return Math.random() * (max - min) + min;
+               }
+
+               const interval = setInterval(function() {
+                   const timeLeft = animationEnd - Date.now();
+                   if (timeLeft <= 0) {
+                       return clearInterval(interval);
+                   }
+                   const particleCount = 50 * (timeLeft / duration);
+                   confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                   confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+               }, 250);
+           }
+       }, 1000);
+
+       // --- Gambar Tersebar (Diperbaiki agar lebih rapih) ---
+       const imageGallery = document.getElementById('image-gallery');
+       const characterImages = [
+           'stitch.jpeg', 'stitch2.jpeg', 'stitch1.jpeg', 'cap4.jpeg', 'cap3.jpeg',
+           'cap2.jpeg', 'cap1.jpeg', 'sully3.jpg', 'sully2.jpeg', 'sully.jpeg'
+       ];
+
+       const imageWidth = 120; // Ukuran gambar lebih kecil
+       const imageHeight = 120;
+       const containerHeight = 400; // Tinggi container gambar disesuaikan
+
+       imageGallery.style.height = `${containerHeight}px`; // Set tinggi container di JS
+
+       characterImages.forEach((imageUrl, index) => {
+           const img = document.createElement('img');
+           img.src = imageUrl;
+           img.alt = 'Gambar Karakter Lucu';
+           img.className = 'image-item';
+           img.style.width = `${imageWidth}px`;
+           img.style.height = `${imageHeight}px`;
+
+           // Batasi posisi atas dan bawah
+           const topPos = Math.random() * (containerHeight - imageHeight);
+           img.style.top = `${topPos}px`;
+
+           // Atur posisi kiri dan kanan dengan batas yang lebih ketat
+           if (index % 2 === 0) {
+               const leftPos = Math.random() * (0.4 * (imageGallery.offsetWidth - imageWidth)); // Agak ke kiri
+               img.style.left = `${leftPos}px`;
+           } else {
+               const rightPos = Math.random() * (0.4 * (imageGallery.offsetWidth - imageWidth)); // Agak ke kanan
+               img.style.right = `${rightPos}px`;
+           }
+
+           const rotation = (Math.random() - 0.5) * 30; // Rotasi tidak terlalu ekstrem
+           img.style.transform = `rotate(${rotation}deg)`;
+           img.style.zIndex = index;
+           imageGallery.appendChild(img);
+       });
+   </script>
+
+</body>
+</html>
